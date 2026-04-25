@@ -48,31 +48,32 @@ You are connected to a Linux server and need to:
 
 1. Check current directory
 ```bash
-bash pwd
+pwd
 ```
 
-3. Go to system configuration directory
+2. Go to system configuration directory
+
 ```bash
-bash cd /etc 
+cd /etc 
 ```
 
-4. List files with details
+3. List files with details
 ```bash
-bash ls -la 
+ls -la 
 ```
 
-5. Move to logs directory
+4. Move to logs directory
 ```bash
-bash cd /var/log 
+cd /var/log 
 ```
-7. Return to previous directory
+5. Return to previous directory
 ```bash
-bash cd - 
+cd - 
 ```
 
-8. Go back to home directory
+6. Go back to home directory
 ```bash
-bash cd ~ 
+cd ~ 
 ```
 
 ---
@@ -189,7 +190,7 @@ cd /etc
 
 - Switching between directories quickly:
 ```
-bash cd - 
+cd - 
 ```
 
 ---
