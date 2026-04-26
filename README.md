@@ -28,7 +28,7 @@ ___
 
 📂 Structure
 ```bash
-commands/
+linux-admin-notes/
 ├── navigation/
 ├── file-operations/
 ├── processes-services/
