@@ -174,3 +174,16 @@ Networking is essential for:
 * Supporting production systems
 
 Understanding these commands is critical for any Linux administrator.
+
+____
+
+## 🔗 Related Lab
+
+Apply these concepts in real-world troubleshooting scenarios:
+
+👉 Networking DNS & Routing Lab (linux-troubleshooting-labs)
+
+Covers:
+- DNS resolution failure  
+- Missing default route  
+- ❌ Port not accessible (service not listening / blocked)
