@@ -16,66 +16,20 @@ Understand and practice file management in Linux using real-world scenarios.
 
 ⸻
 
-⚡ Command Reference
-Command
+## ⚡ Command Reference
 
-Purpose
-
-Example
-
-touch
-
-Create empty file
-
-touch file.txt
-
-cp
-
-Copy file
-
-cp file.txt /tmp/
-
-cp -r
-
-Copy directory
-
-cp -r dir/ /tmp/
-
-mv
-
-Move or rename
-
-mv file.txt new.txt
-
-rm
-
-Remove file
-
-rm file.txt
-
-rm -r
-
-Remove directory
-
-rm -r dir/
-
-rm -rf
-
-Force remove
-
-rm -rf dir/
-
-cat
-
-Show file content
-
-cat file.txt
-
-less
-
-View file (paged)
-
-less file.txt
+| Command | Description | Example | Notes |
+|--------|------------|--------|------|
+| `touch` | Create an empty file | `touch file.txt` | Useful for creating new files quickly |
+| `cp` | Copy a file | `cp file.txt /tmp/` | Overwrites by default |
+| `cp -r` | Copy directories recursively | `cp -r dir/ /tmp/` | Required for directories |
+| `cp -i` | Copy with confirmation | `cp -i file.txt /tmp/` | Prevents accidental overwrite |
+| `mv` | Move or rename files | `mv file.txt new.txt` | Used for both move and rename |
+| `rm` | Remove a file | `rm file.txt` | Permanent deletion |
+| `rm -r` | Remove directory | `rm -r dir/` | Recursive delete |
+| `rm -rf` | Force remove | `rm -rf dir/` | ⚠️ Dangerous, no confirmation |
+| `cat` | Display file content | `cat file.txt` | Good for small files |
+| `less` | View file (paged) | `less file.txt` | Better for large files |
 
 ___
 
