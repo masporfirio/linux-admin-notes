@@ -32,89 +32,126 @@ ____
 
 ____
 
-🧪 Mini Lab (Real Scenario)
+## 🧪 Mini Lab (Guided Scenario)
 
-Scenario
+### Scenario
 
 A user reports that the server cannot access the internet.
 
-⸻
+---
 
-Tasks
+🔍 Step 1: Check IP Address
 
-1. Check IP address
 ```bash
 ip a
 ```
 
-2. Check connectivity
+👉 Verify that the interface has a valid IP address
+✔️ If no IP → interface or DHCP issue
+
+⸻
+
+🔍 Step 2: Test Raw Connectivity
 ```bash
 ping 8.8.8.8
 ```
 
-3. Test DNS resolution
-```bash
-ping google.com
-```
-
-4. Check open ports
-```bash
-ss -tulnp
-```
-___
-
-🔍 Troubleshooting
-
-❌ Problem 1: No internet access
-```bash
-ping 8.8.8.8
-```
-
-Error
+❌ Possible Error
 ```bash
 Network is unreachable
 ```
 
-✅ Fix
+👉 Indicates routing issue
+
+⸻
+
+🔍 Step 3: Check Routing Table
 ```bash
 ip route
 ```
 
-👉 Check if default gateway exists
+❌ Possible Issue
+```bash
+(no default route)
+```
 
-⸻
+✅ Fix (example)
+```bash
+sudo ip route add default via 192.168.1.1
+```
 
-❌ Problem 2: DNS not resolving
+🔍 Step 4: Test DNS Resolution
 ```bash
 ping google.com
 ```
 
-Error
+❌ Possible Error
 ```bash
 Temporary failure in name resolution
 ```
 
-✅ Fix
+👉 Network OK, DNS broken
+
+⸻
+
+🔍 Step 5: Check DNS Configuration
 ```bash
 cat /etc/resolv.conf
 ```
 
-👉 Verify DNS server configuration
+❌ Possible Issue
+```bash
+nameserver 127.0.0.53
+```
+
+(or invalid/missing entry)
 
 ⸻
 
-❌ Problem 3: Port not accessible
+✅ Fix (example)
+```bash
+sudo nano /etc/resolv.conf
+```
 
-Symptom
+Add:
+```bash
+nameserver 8.8.8.8
+```
 
-Service running but not reachable
-
-✅ Fix
+🔍 Step 6: Check Open Ports
 ```bash
 ss -tulnp
 ```
 
-👉 Check if service is listening on correct port
+❌ Possible Issue
+
+Service not listening on expected port
+
+Example
+```bash
+LISTEN 0 128 127.0.0.1:8080
+```
+
+👉 Service bound to localhost only
+
+⸻
+
+✅ Fix (example)
+
+* Reconfigure service to listen on 0.0.0.0
+* Restart service:
+```bash
+sudo systemctl restart <service>
+```
+____
+
+🧠 Key Takeaways
+
+* Always test IP connectivity first
+* Then test DNS resolution
+* Check routing before assuming network failure
+* Validate if services are listening on correct interfaces
+
 
 ⸻
 
