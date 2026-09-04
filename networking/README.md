@@ -1,226 +1,56 @@
-🌐 Networking (Linux)
+# Linux Networking Checks
 
-🎯 Objective
+## Commands
 
-Understand and troubleshoot basic Linux networking using real-world scenarios.
+| Command | Purpose | Example |
+|---|---|---|
+| `ip link` | Show interfaces and link state | `ip link` |
+| `ip addr` | Show assigned addresses | `ip addr show` |
+| `ip route` | Show routes and the default gateway | `ip route` |
+| `ss -ltnp` | Show listening TCP sockets | `sudo ss -ltnp` |
+| `ping` | Test ICMP reachability | `ping -c 3 1.1.1.1` |
+| `getent hosts` | Test system name resolution | `getent hosts example.com` |
+| `nc -vz` | Test a TCP port | `nc -vz example.com 443` |
+| `curl -I` | Request HTTP headers | `curl -I https://example.com` |
 
-⸻
-
-🧠 Key Concepts
-
-* IP addressing (IPv4/IPv6)
-* DNS resolution
-* Network interfaces
-* Routing basics
-
-____
-
-## ⚡ Command Reference
-
-| Command | Description | Example | Notes |
-|--------|------------|--------|------|
-| `ip a` | Show IP addresses | `ip a` | Replaces `ifconfig` |
-| `ip route` | Show routing table | `ip route` | Check default gateway |
-| `ping` | Test connectivity | `ping google.com` | ICMP test |
-| `ss -tulnp` | Show open ports | `ss -tulnp` | Replaces `netstat` |
-| `netstat -tulnp` | Show ports (legacy) | `netstat -tulnp` | Requires net-tools |
-| `traceroute` | Trace network path | `traceroute google.com` | Diagnose routing issues |
-| `tracepath` | Trace path (no root) | `tracepath google.com` | Alternative without sudo |
-| `dig` | DNS query | `dig google.com` | Detailed DNS info |
-| `nslookup` | DNS lookup | `nslookup google.com` | Simpler DNS tool |
-| `host` | Resolve hostname | `host google.com` | Quick DNS check |
-
-____
-
-## 🧪 Mini Lab (Guided Scenario)
-
-### Scenario
-
-A user reports that the server cannot access the internet.
-
----
-
-🔍 Step 1: Check IP Address
+## Basic order of checks
 
 ```bash
-ip a
+ip link
+ip addr
+ip route
+ping -c 3 <gateway-ip>
+ping -c 3 <remote-ip>
+getent hosts <hostname>
+nc -vz <hostname> <port>
 ```
 
-👉 Verify that the interface has a valid IP address
-✔️ If no IP → interface or DHCP issue
+This order moves from the local interface to routing, remote reachability, DNS and the application port.
 
-⸻
+## Local service check
 
-🔍 Step 2: Test Raw Connectivity
 ```bash
-ping 8.8.8.8
+sudo ss -ltnp | grep ':8080'
+curl -I http://127.0.0.1:8080
 ```
 
-❌ Possible Error
-```bash
-Network is unreachable
-```
+The socket check answers whether something is listening. The HTTP request answers whether the application responds.
 
-👉 Indicates routing issue
+## Verification
 
-⸻
+Repeat the smallest test that showed the original failure, then check the next layer. For example, after restoring a route:
 
-🔍 Step 3: Check Routing Table
 ```bash
 ip route
+ping -c 3 <gateway-ip>
+nc -vz <service-ip> <port>
 ```
 
-❌ Possible Issue
-```bash
-(no default route)
-```
+## Common mistakes
 
-✅ Fix (example)
-```bash
-sudo ip route add default via 192.168.1.1
-```
+- `ping hostname` mixes network reachability with DNS resolution.
+- Some networks block ICMP, so a failed ping is not enough to prove that every connection is down.
+- A listening service bound only to `127.0.0.1` is not reachable from another host.
+- `netstat` and `ifconfig` may not be installed; `ss` and `ip` are the current tools on many Linux systems.
 
-🔍 Step 4: Test DNS Resolution
-```bash
-ping google.com
-```
-
-❌ Possible Error
-```bash
-Temporary failure in name resolution
-```
-
-👉 Network OK, DNS broken
-
-⸻
-
-🔍 Step 5: Check DNS Configuration
-```bash
-cat /etc/resolv.conf
-```
-
-❌ Possible Issue
-```bash
-nameserver 127.0.0.53
-```
-
-(or invalid/missing entry)
-
-⸻
-
-✅ Fix (example)
-```bash
-sudo nano /etc/resolv.conf
-```
-
-Add:
-```bash
-nameserver 8.8.8.8
-```
-
-🔍 Step 6: Check Open Ports
-```bash
-ss -tulnp
-```
-
-❌ Possible Issue
-
-Service not listening on expected port
-
-Example
-```bash
-LISTEN 0 128 127.0.0.1:8080
-```
-
-👉 Service bound to localhost only
-
-⸻
-
-✅ Fix (example)
-
-* Reconfigure service to listen on 0.0.0.0
-* Restart service:
-```bash
-sudo systemctl restart <service>
-```
-____
-
-🧠 Key Takeaways
-
-* Always test IP connectivity first
-* Then test DNS resolution
-* Check routing before assuming network failure
-* Validate if services are listening on correct interfaces
-
-
-⸻
-
-⚠️ Common Mistakes
-
-* Confusing network vs DNS issue
-* Not checking IP before testing DNS
-* Ignoring routing table
-* Using outdated commands (ifconfig)
-
-⸻
-
-🧠 Tips (LPIC + Real World)
-
-* Always test connectivity with IP first
-* Then test DNS resolution
-* Use ss instead of netstat
-* Check /etc/resolv.conf for DNS issues
-
-⸻
-
-🧪 Challenge
-
-Simulate:
-
-* No internet connection
-* Broken DNS
-
-👉 Diagnose step by step
-
-⸻
-
-🚀 Real-World Usage
-
-* Check active ports:
-```bash
-ss -tulnp
-```
-
-* Diagnose DNS:
-```bash
-dig google.com
-```
-
-* Verify connectivity:
-```bash
-ping 8.8.8.8
-```
-
-📌 Summary
-
-Networking is essential for:
-
-* Troubleshooting connectivity
-* Diagnosing DNS issues
-* Managing services and ports
-* Supporting production systems
-
-Understanding these commands is critical for any Linux administrator.
-
-____
-
-## 🔗 Related Lab
-
-Apply these concepts in real-world troubleshooting scenarios:
-
-👉 Networking DNS & Routing Lab (linux-troubleshooting-labs)
-
-Covers:
-- DNS resolution failure  
-- Missing default route  
-- ❌ Port not accessible (service not listening / blocked)
+DNS-specific notes are kept in [DNS](../dns/).

@@ -1,166 +1,50 @@
-📜 Logs & System Analysis (Linux)
+# Logs and Journal Checks
 
-🎯 Objective
+## Commands
 
-Understand how to analyze logs and diagnose system issues in Linux.
+| Command | Purpose | Example |
+|---|---|---|
+| `journalctl -b` | Show journal entries from the current boot | `journalctl -b` |
+| `journalctl -u` | Filter by systemd unit | `journalctl -u ssh` |
+| `journalctl --since` | Limit the time window | `journalctl --since '15 minutes ago'` |
+| `journalctl -p` | Filter by priority | `journalctl -p warning` |
+| `tail -n` | Show the last lines of a text log | `tail -n 30 /var/log/syslog` |
+| `tail -f` | Follow new lines | `tail -f /var/log/syslog` |
+| `less` | Read a large file page by page | `less /var/log/syslog` |
+| `grep` | Find matching lines | `grep -i error application.log` |
 
-⸻
+## Service investigation
 
-🧠 Key Concepts
-
-* System logs
-* Service logs
-* Log levels
-* Real-time monitoring
-
-⸻
-
-## ⚡ Command Reference
-
-| Command | Description | Example | Notes |
-|--------|------------|--------|------|
-| `journalctl` | View system logs | `journalctl` | Main systemd log viewer |
-| `journalctl -u` | View logs for a specific service | `journalctl -u ssh` | Focus on one service |
-| `journalctl -xe` | Show detailed errors | `journalctl -xe` | Useful for troubleshooting failures |
-| `journalctl -f` | Follow logs in real time | `journalctl -f` | Similar to `tail -f` |
-| `journalctl -n` | Show last N log entries | `journalctl -n 20` | Quick recent logs |
-| `tail -f` | Follow log file in real time | `tail -f /var/log/syslog` | Works on traditional log files |
-| `tail -n` | Show last lines of a file | `tail -n 20 file.log` | Quick inspection |
-| `less` | View large log files | `less /var/log/syslog` | Scrollable, safer than `cat` |
-| `grep` | Search inside logs | `grep error /var/log/syslog` | Filter relevant entries |
-| `dmesg` | Show kernel messages | `dmesg` | Hardware and boot logs |
-
-____
-
-🧪 Mini Lab (Real Scenario)
-
-Scenario
-
-A service is failing and you need to check logs to find the issue.
-
-⸻
-
-Tasks
-
-1. Check service logs
 ```bash
-journalctl -u ssh
+systemctl status <service> --no-pager
+sudo journalctl -u <service> -n 50 --no-pager
+sudo journalctl -u <service> --since '15 minutes ago' --no-pager
 ```
 
-2. View recent logs
+Filtering by service and time keeps the first review focused.
+
+## Boot messages
+
 ```bash
-journalctl -n 20
+journalctl -b -p warning
+dmesg --level=err,warn
 ```
 
-3. Monitor logs in real time
+`dmesg` shows kernel messages. Access may be restricted for normal users.
+
+## Verification
+
+After fixing a service, check only new entries:
+
 ```bash
-journalctl -f
+sudo journalctl -u <service> --since '2 minutes ago' --no-pager
 ```
 
-4. Search for errors
-```bash
-journalctl | grep error
-```
+This helps separate the old error from the result of the latest attempt.
 
-____
+## Common mistakes
 
-🔍 Troubleshooting
-
-❌ Problem 1: Service not starting
-```bash
-systemctl status nginx
-```
-
-✅ Fix
-```bash
-journalctl -u nginx
-```
-
-👉 Check detailed logs
-
-⸻
-
-❌ Problem 2: No logs appearing
-
-Symptom
-
-Logs not showing expected output
-
-✅ Fix
-```bash
-journalctl -xe
-```
-
-👉 Check system-level errors
-
-⸻
-
-❌ Problem 3: Log file too large
-
-Symptom
-
-File hard to read
-
-✅ Fix
-```bash
-less /var/log/syslog
-```
-
-👉 Use paging instead of cat
-
-⸻
-
-⚠️ Common Mistakes
-
-* Not checking logs first
-* Using cat on large files
-* Ignoring system logs
-* Not filtering output
-
-⸻
-
-🧠 Tips (LPIC + Real World)
-
-* Logs are your best troubleshooting tool
-* Use journalctl -u for services
-* Combine grep to filter logs
-* Use -f for live monitoring
-
-⸻
-
-🧪 Challenge
-
-Simulate:
-
-* Service failure
-* Identify issue using logs
-
-⸻
-
-🚀 Real-World Usage
-
-* Check failed service:
-```bash
-journalctl -u nginx
-```
-
-* Monitor logs:
-```bash
-tail -f /var/log/syslog
-```
-
-* Search for errors:
-```bash
-grep error /var/log/syslog
-```
-
-📌 Summary
-
-Log analysis is essential for:
-
-* Troubleshooting system issues
-* Diagnosing failures
-* Monitoring system behavior
-* Maintaining system reliability
-
-Mastering logs is one of the most important skills in Linux administration.
+- `journalctl -xe` is broad; a unit and time filter are often easier to read first.
+- `grep error` can miss other useful words such as `failed`, `denied` or an exit code.
+- `cat` can flood the terminal with a large log. Use `less`, `tail` or a time filter.
+- Logs can contain usernames, IP addresses, hostnames and tokens. Remove private data before publishing an example.
