@@ -1,207 +1,48 @@
-# 📂 Directory Navigation (Linux)
+# Directory Navigation
 
-## 🎯 Objective
+## Paths
 
-Understand and practice directory navigation in Linux using real-world scenarios.
+- An absolute path starts at `/`, for example `/var/log`.
+- A relative path starts from the current directory, for example `../logs`.
+- `~` expands to the current user's home directory in the shell.
+- `.` means the current directory and `..` means its parent.
 
----
-
-## 🧠 Key Concepts
-
-- Absolute path → /etc/nginx/nginx.conf  
-- Relative path → ../logs  
-- Home directory → ~  
-- Previous directory → -  
-- Parent directory → ..  
-
----
-
-## ⚡ Command Reference
+## Commands
 
 | Command | Purpose | Example |
-|--------|--------|--------|
-| pwd | Show current directory | pwd |
-| cd <path> | Change directory | cd /etc |
-| cd ~ | Go to home directory | cd ~ |
-| cd .. | Go to parent directory | cd .. |
-| cd - | Go to previous directory | cd - |
-| ls | List files | ls |
-| ls -l | Detailed list | ls -l |
-| ls -a | Show hidden files | ls -a |
-| ls -la | Detailed + hidden | ls -la |
+|---|---|---|
+| `pwd` | Print the current directory | `pwd` |
+| `ls` | List directory contents | `ls /etc` |
+| `ls -la` | Include hidden files and details | `ls -la ~` |
+| `cd` | Change directory | `cd /var/log` |
+| `cd -` | Return to the previous directory | `cd -` |
+| `cd ~` | Go to the current user's home | `cd ~` |
 
----
+## Practice
 
-## 🧪 Mini Lab (Real Scenario)
-
-### Scenario
-
-You are connected to a Linux server and need to:
-
-- Navigate to configuration files  
-- Check log directories  
-- Return to your working directory  
-
----
-
-### Tasks
-
-1. Check current directory
 ```bash
+pwd
+cd /etc
+ls -la
+cd /var/log
+cd -
+cd ~
 pwd
 ```
 
-2. Go to system configuration directory
+## Verification
+
+Run `pwd` after `cd` when the next command depends on the current location.
 
 ```bash
-cd /etc 
+cd /var/log && pwd
 ```
 
-3. List files with details
-```bash
-ls -la 
-```
+The `&&` means `pwd` runs only if `cd` succeeds.
 
-4. Move to logs directory
-```bash
-cd /var/log 
-```
-5. Return to previous directory
-```bash
-cd - 
-```
+## Common mistakes
 
-6. Go back to home directory
-```bash
-cd ~ 
-```
-
----
-
-## 🔍 Troubleshooting
-
-### ❌ Problem 1: Directory not found
-
-```bash
-cd etc
-``` 
-
-### Error
-
-```bash
-No such file or directory
-```
-
-### ✅ Fix
-
-```bash
-cd /etc
-```
-
-👉 Missing absolute path
-
----
-
-### ❌ Problem 2: Permission denied
-
-```bash
-cd /root 
-```
-
-### Error
-
-```bash
-Permission denied
-```
-
-### ✅ Fix
-
-```bash
-sudo -i cd /root
-``` 
-
-👉 Requires root privileges
-
----
-
-### ❌ Problem 3: Getting lost in directories
-
-### Symptom
-You don’t know where you are
-
-### ✅ Fix
-
-```bash
-pwd 
-```
-
-👉 Always check your current location
-
----
-
-## ⚠️ Common Mistakes
-
-- Forgetting / in absolute paths  
-- Confusing ~ with /  
-- Not using cd - to return quickly  
-- Ignoring hidden files (ls -a)  
-
----
-
-## 🧠 Tips (LPIC + Real World)
-
-- cd - is frequently used in real environments  
-- Logs are usually in /var/log  
-- Configuration files are typically in /etc  
-- Always verify location before running commands  
-
----
-
-## 🧪 Challenge
-
-You are in:
-```bash
-/home/user/Documents
-```
-
-Navigate to:
-```bash
-/var/log
-```
-
-👉 Try using:
-
-- Absolute path  
-- Relative path  
-
----
-
-## 🚀 Real-World Usage
-
-- Navigating to check logs:
-```bash
-cd /var/log 
-```
-
-- Accessing configuration files:
-```bash
-cd /etc 
-```
-
-- Switching between directories quickly:
-```
-cd - 
-```
-
----
-
-## 📌 Summary
-
-Directory navigation is a fundamental Linux skill used in:
-
-- System administration  
-- Troubleshooting  
-- Log analysis  
-- Configuration management  
-
-Mastering it improves speed and efficiency in real-world environments.
+- `cd etc` looks for an `etc` directory under the current path; `cd /etc` uses the system directory.
+- `sudo cd /root` does not work because `cd` is a shell builtin. To open a root login shell, use `sudo -i`, then check the location with `pwd`.
+- Hidden files begin with a dot and are not shown by plain `ls`.
+- Before deleting or moving files with relative paths, confirm the current directory.

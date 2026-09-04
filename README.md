@@ -1,72 +1,32 @@
-📘 Linux Admin Notes
+# Linux Admin Notes
 
-Practical Linux command reference and administration notes focused on real-world usage, troubleshooting, and system operations.
+These are short Linux administration notes from my study and virtual-machine practice. I use them as a reminder of what a command checks, why I would use it and how to verify the result.
 
-⸻
+The examples are written for learning. Distribution names, service names and available options can differ, so I check the local manual page before making a system change.
 
-🎯 Objective
+## Notes
 
-Build a practical handbook for Linux administration, combining:
+| Topic | What it covers |
+|---|---|
+| [Navigation](navigation/) | paths, `pwd`, `cd` and `ls` |
+| [File operations](file-operations/) | creating, copying, moving, finding and archiving files |
+| [Processes and services](processes-services/) | `ps`, signals, `systemctl` and unit logs |
+| [Networking](networking/) | interfaces, addresses, routes, sockets and basic tests |
+| [Logs](logs/) | `journalctl`, `less`, `tail` and `grep` |
+| [Permissions](permissions/) | modes, ownership and ACL checks |
+| [Users and groups](users-groups/) | identity, group membership and account checks |
+| [Packages](packages/) | Debian and RPM package checks |
+| [Storage](storage/) | block devices, filesystems, mounts and space |
+| [DNS](dns/) | resolver checks and name-resolution tools |
 
-* Command reference
-* Real usage examples
-* Common mistakes
-* Troubleshooting scenarios
+## How I use these notes
 
-⸻
+For a troubleshooting check, I try to record:
 
-🧠 Topics Covered
+1. **Command** - what I ran.
+2. **Purpose** - the question it answers.
+3. **Example** - a small, reproducible use.
+4. **Verification** - how I know the result changed.
+5. **Common mistake** - a limit or risk to remember.
 
-* 📂 File and directory management
-* 🔐 Permissions and ownership
-* ⚙️ Processes and services (systemd)
-* 🌐 Networking (TCP/IP, DNS)
-* 📜 Logs and system analysis
-* 🛠️ Basic system administration
-
-___
-
-📂 Structure
-```bash
-linux-admin-notes/
-├── navigation/
-├── file-operations/
-├── processes-services/
-├── networking/
-├── logs/
-```
-
-⚡ Example
-
-Check open ports
-```bash
-ss -tulnp
-```
-___
-
-👉 Used to identify running services and troubleshoot port conflicts
-
-⸻
-
-🔍 Troubleshooting Focus
-
-This repository includes practical scenarios such as:
-
-* Service not starting
-* Port already in use
-* Permission denied errors
-* DNS not resolving
-
-⸻
-
-🚀 Goal
-
-Create a fast and practical reference for daily Linux administration and IT Support tasks.
-
-___
-
-## 📌 In Progress
-
-- Building command reference with real-world examples  
-- Adding troubleshooting scenarios  
-- Expanding networking and system administration topics  
+Longer exercises are kept in [Linux Troubleshooting Labs](https://github.com/masporfirio/linux-troubleshooting-labs).

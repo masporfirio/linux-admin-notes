@@ -1,200 +1,44 @@
-📄 File Operations (Linux)
+# File and Directory Operations
 
-🎯 Objective
+## Commands
 
-Understand and practice file management in Linux using real-world scenarios.
+| Command | Purpose | Example |
+|---|---|---|
+| `touch` | Create an empty file or update its timestamp | `touch notes.txt` |
+| `mkdir -p` | Create a directory path | `mkdir -p lab/input` |
+| `cp -i` | Copy and ask before overwriting | `cp -i notes.txt lab/` |
+| `mv -i` | Move or rename and ask before overwriting | `mv -i notes.txt linux-notes.txt` |
+| `rm -i` | Remove a file with a prompt | `rm -i old-notes.txt` |
+| `find` | Search the live directory tree | `find . -type f -name '*.log'` |
+| `file` | Inspect the detected file type | `file download.bin` |
+| `stat` | Show size, mode and timestamps | `stat notes.txt` |
+| `tar` | Create or extract an archive | `tar -czf lab.tar.gz lab/` |
 
-⸻
+## Practice
 
-🧠 Key Concepts
-
-* Copying files → cp
-* Moving/renaming → mv
-* Removing files → rm
-* Creating files → touch
-* Viewing content → cat, less
-
-⸻
-
-## ⚡ Command Reference
-
-| Command | Description | Example | Notes |
-|--------|------------|--------|------|
-| `touch` | Create an empty file | `touch file.txt` | Useful for creating new files quickly |
-| `cp` | Copy a file | `cp file.txt /tmp/` | Overwrites by default |
-| `cp -r` | Copy directories recursively | `cp -r dir/ /tmp/` | Required for directories |
-| `cp -i` | Copy with confirmation | `cp -i file.txt /tmp/` | Prevents accidental overwrite |
-| `mv` | Move or rename files | `mv file.txt new.txt` | Used for both move and rename |
-| `rm` | Remove a file | `rm file.txt` | Permanent deletion |
-| `rm -r` | Remove directory | `rm -r dir/` | Recursive delete |
-| `rm -rf` | Force remove | `rm -rf dir/` | ⚠️ Dangerous, no confirmation |
-| `cat` | Display file content | `cat file.txt` | Good for small files |
-| `less` | View file (paged) | `less file.txt` | Better for large files |
-
-___
-
-🧪 Mini Lab (Real Scenario)
-
-Scenario
-
-You need to manage files on a Linux server:
-
-* Create a file
-* Copy it to another directory
-* Rename it
-* Remove it
-
-⸻
-
-Tasks
-
-1. Create a file
 ```bash
-touch test.txt
+mkdir -p file-lab/input
+touch file-lab/input/example.log
+cp -i file-lab/input/example.log file-lab/example-copy.log
+find file-lab -type f -name '*.log'
+tar -czf file-lab.tar.gz file-lab/
+tar -tzf file-lab.tar.gz
 ```
 
-2. Copy file to /tmp
+`tar -t` lists an archive without extracting it. This is a useful check before unpacking files into the current directory.
+
+## Verification
+
 ```bash
-cp test.txt /tmp/
+ls -l file-lab
+find file-lab -type f -print
+tar -tzf file-lab.tar.gz
 ```
 
-3. Rename the file
-```bash
-mv test.txt file-renamed.txt
-```
+## Common mistakes
 
-4. View file content
-```bash
-cat file-renamed.txt
-```
-
-5. Remove file
-```bash
-rm file-renamed.txt
-```
-___
-
-🔍 Troubleshooting
-
-❌ Problem 1: File not found
-```bash
-cp file.txt /tmp/
-```
-
-Error
-```bash
-cp: cannot stat 'file.txt': No such file or directory
-```
-
-✅ Fix
-```bash
-ls
-cp correct-file.txt /tmp/
-```
-
-👉 Verify file name before operations
-
-⸻
-
-❌ Problem 2: Permission denied
-```bash
-rm /root/file.txt
-```
-
-Error
-```bash
-Permission denied
-```
-
-✅ Fix
-```bash
-sudo rm /root/file.txt
-```
-
-👉 Requires elevated privileges
-
-⸻
-
-❌ Problem 3: Deleting wrong files
-
-Risk
-
-Using:
-```bash
-rm -rf *
-```
-
-✅ Advice
-
-* Always check directory:
-```bash
-pwd
-ls
-```
-
-👉 Avoid destructive commands without validation
-
-⸻
-
-⚠️ Common Mistakes
-
-* Using rm -rf without checking directory
-* Forgetting -r when copying directories
-* Overwriting files accidentally with cp
-* Not verifying file paths
-
-⸻
-
-🧠 Tips (LPIC + Real World)
-
-* Use cp -i to avoid overwriting files
-* Prefer less over cat for large files
-* Always double-check before using rm -rf
-* Use mv for both rename and move operations
-
-⸻
-
-🧪 Challenge
-
-Create a directory structure:
-```bash
-project/
- ├── file1.txt
- └── backup/
-```
-
-Tasks:
-
-* Copy file1.txt to backup/
-* Rename it to file1.bak
-* Delete original file
-
-⸻
-
-🚀 Real-World Usage
-
-* Backup configuration file:
-```bash
-cp /etc/nginx/nginx.conf /tmp/nginx.conf.bak
-```
-
-* Rename log file:
-```bash
-mv app.log app.log.old
-```
-
-* Remove temporary files:
-```bash
-rm -rf /tmp/*
-```
-
-📌 Summary
-
-File operations are essential for:
-
-* System administration
-* Backup and recovery
-* Log management
-* Troubleshooting tasks
-
-Mastering them prevents critical mistakes in production systems.
+- `rm` does not normally move files to a recycle bin.
+- `rm -r` can remove a whole directory tree. Check the exact path first.
+- Shell wildcards are expanded before the command runs. Preview a pattern with `printf '%s\n' pattern*` or `ls` before using it with a destructive command.
+- A file extension does not prove the file type; use `file` when the source is uncertain.
+- Quote paths that contain spaces: `cp 'my notes.txt' backup/`.
